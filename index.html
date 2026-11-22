@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>TradingView'de aç</title>
+<style>
+  :root { color-scheme: dark light; }
+  body { margin: 0; min-height: 100vh; display: flex; align-items: center; justify-content: center;
+         font-family: -apple-system, system-ui, sans-serif; background: #0e1116; color: #e6e9ef; }
+  main { width: min(92vw, 420px); text-align: center; padding: 24px 16px; }
+  h1 { font-size: 22px; margin: 0 0 6px; word-break: break-all; }
+  p { color: #9aa4b2; font-size: 14px; margin: 0 0 22px; }
+  a.btn { display: block; padding: 16px; border-radius: 12px; font-size: 17px; font-weight: 600; text-decoration: none; margin-bottom: 12px; }
+  a.ana { background: #2962ff; color: #fff; }
+  a.yan { border: 1px solid #2f3742; color: #c9d1dc; }
+  @media (prefers-color-scheme: light) { body { background: #f6f7f9; color: #14171c; } p { color: #5b6573; } a.yan { border-color: #cfd6de; color: #2b3340; } }
+</style>
+</head>
+<body>
+<main>
+  <h1 id="ad">TradingView</h1>
+  <p id="not">Uygulama açılıyor…</p>
+  <a class="btn ana" id="uyg" href="#">TradingView uygulamasında aç</a>
+  <a class="btn yan" id="web" href="https://www.tradingview.com/chart/">Tarayıcıda aç</a>
+</main>
+<script>
+  // Yalnız sembolü alır ve TradingView uygulamasının kendi adresine yönlendirir. Hiçbir veri toplamaz, hiçbir yere göndermez.
+  (function () {
+    var s = (new URLSearchParams(location.search).get('s') || '').toUpperCase();
+    var ad = document.getElementById('ad'), not = document.getElementById('not');
+    var uyg = document.getElementById('uyg'), web = document.getElementById('web');
+    if (!/^[A-Z0-9]{1,15}:[A-Z0-9._!]{1,30}$/.test(s)) {
+      not.textContent = 'Sembol verilmedi ya da tanınmadı.';
+      uyg.href = 'tradingview://'; return;
+    }
+    var q = encodeURIComponent(s);
+    ad.textContent = s.split(':')[1];
+    uyg.href = 'tradingview://chart?symbol=' + q;
+    web.href = 'https://www.tradingview.com/chart/?symbol=' + q;
+    setTimeout(function () { location.href = uyg.href; }, 150);          // kendiliğinden dene; engellenirse düğme var
+    setTimeout(function () { not.textContent = 'Açılmadıysa düğmeye dokun.'; }, 1600);
+  })();
+</script>
+</body>
+</html>
